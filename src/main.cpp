@@ -12,19 +12,32 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "Image.h"
+#include "utils.h"
+
+using namespace std;
+
 int main() {
 
     int w, h, c;
-    unsigned char* data;
+    unsigned char *data;
 
     // Read in image file
-    data = stbi_load("example.png", &w, &h, &c, 0);
+    data = stbi_load("../Images/gracehopper.png", &w, &h, &c, 0);
 
+    // Create Image Object
+    Image img(w, h, c, data);
+    for(int i = 0; i < w*h*c; ++i){cout << char2int(data[i]) <<" ";}
+
+
+    cout << "hello" << endl;
     // Print image size to screen
-    std::cout << "Image loaded with size " << w << " x " << h << " with " << c << " channel(s)." << std::endl; 
+    cout << "Image loaded with size " << w << " x " << h << " with " << c << " channel(s)." << endl;
 
     // Save image to new filename
-    int success = stbi_write_png("output.png", w, h, c, data, 0);
+    int success = stbi_write_png("../Output/output.png", w, h, c, data, 0);
+    if (success) { cout << "Succeed!" << endl; }
+    else { cout << "Error!" << endl; }
 
     // Deallocate memory
     stbi_image_free(data);

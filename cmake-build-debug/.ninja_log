@@ -1,0 +1,6 @@
+# ninja log v5
+6	235	1679263436905319128	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o	8ef96f72df5b32dd
+0	147	1679263510266036259	build.ninja	2ff1710275c2f370
+2	854	1679253938713757485	CMakeFiles/advanced_programming_group_dijkstra.dir/src/minimal.cpp.o	5246cdacbd199a68
+957	1203	1679263437882516833	advanced_programming_group_dijkstra	77c49837da9cca8a
+6	957	1679263437629299885	CMakeFiles/advanced_programming_group_dijkstra.dir/src/main.cpp.o	5114999b4de5d759
