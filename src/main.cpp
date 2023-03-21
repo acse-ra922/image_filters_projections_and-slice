@@ -26,14 +26,22 @@ int main() {
     // Read in image file
     data = stbi_load("../Images/gracehopper.png", &w, &h, &c, 0);
 
-    // Create Image Object
+    // Create Image object
     Image img(w, h, c, data);
 
     Filter f;
+
+    // Color correction
+    cout << "Color Correction: " << endl;
     f.auto_color_bal(img);
     f.hist_equal(img);
     f.grayscale(img);
     f.brightness(img, 100);
+    cout << endl;
+
+
+    // Blur
+    //f.median_blur(img);
 
     //Image img2 = f.Sobel(img);
 //    double* out = img.change2doubledata(data);
@@ -56,10 +64,16 @@ int main() {
     // Deallocate memory
     stbi_image_free(data);
 
+    // Read Pre-processed image
     data = stbi_load("../Images/output_gray.png", &w, &h, &c, 0);
     Image img2(w, h, c, data);
 
+    // Edge detection
+    cout << "Edge Detection:" << endl;
     f.Sobel(img2);
+    f.Prewitt(img2);
+    f.Scharr(img2);
+    cout << endl;
 
     return 0;
 }

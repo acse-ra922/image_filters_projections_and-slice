@@ -3,8 +3,6 @@
 //
 
 #include "Image.h"
-#include <iostream>
-#include <cmath>
 
 // Constructor
 Image::Image(int w, int h, int c, unsigned char* dat) {
@@ -28,7 +26,6 @@ int Image::get_channel() { return this->channel; }
 
 unsigned char* Image::get_data() {return this->data;}
 
-double *Image::get_out() {return this->out;}
 
 // set methods
 void Image::set_width(int w) { this->width = w; }
@@ -54,26 +51,4 @@ unsigned char*Image::padding(unsigned char *dat) {
         }
     }
     return p_data;
-}
-
-
-
-
-double* Image::conv(double*pad_img_grid, double *kernel){
-    int w = this->width;
-    int h = this->height;
-    double result[w*h];
-
-    for (int i = 1; i < h+1; i++){
-        for(int j = 1; j < w+1; j++){
-            double sum = 0.0;
-            sum += (pad_img_grid+i-1)[j-1]*kernel[0] + (pad_img_grid+i-1)[j]*kernel[1] + (pad_img_grid+i-1)[j+1]*kernel[2];
-            sum += (pad_img_grid+i)[j-1]*kernel[3] + (pad_img_grid+i)[j]*kernel[4] + (pad_img_grid+i)[j+1]*kernel[5];
-            sum += (pad_img_grid+i+1)[j-1]*kernel[6] + (pad_img_grid+i+1)[j]*kernel[7] + (pad_img_grid+i+1)[j+1]*kernel[8];
-            result[(i-1)*w+(j-1)] = sum;
-            //std::cout << sum << " ";
-        }
-    }
-
-    return result;
 }

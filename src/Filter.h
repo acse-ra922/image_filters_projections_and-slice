@@ -32,12 +32,15 @@ public:
     void hist_equal(Image img);
 
     // Image Blur
-    Image median_blur(const Image& img);
+    void median_blur(Image img, int kernel=3);
     Image box_blur(const Image& img);
     Image gaussian_blur(const Image& img);
 
     // Edge Detection
+    void conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* output);
     void Sobel(Image img);
+    void Prewitt(Image img);
+    void Scharr(Image img);
 
 };
 
