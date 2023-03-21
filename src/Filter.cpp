@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Filter.h"
 #include "utils.h"
-#include <algorithm> // std::max, std::min
+#include <cmath> // std::max, std::min
 #include "stb_image.h"
 #include "stb_image_write.h"
 
@@ -171,19 +171,77 @@ void Filter::hist_equal(Image img) {
     delete[] histData;
 }
 
+// Blur
+//Image Filter::median_blur(const Image &img) {
+//    int k = kernel;
+//    unsigned char* output_data = new unsigned char[w * h * c];
+//    for (int i = 0; i < h; i++) {
+//        for (int j = 0; j < w; j++) {
+//            for (int ch = 0; ch < c; ch++) {
+//                std::vector<int> values;
+//                for (int ii = std::max(0, i - k); ii <= std::min(h - 1, i + k); ii++) {
+//                    for (int jj = std::max(0, j - k); jj <= std::min(w - 1, j + k); jj++) {
+//                        int idx = (ii * w + jj) * c + ch;
+//                        values.push_back(data[idx]);
+//                    }
+//                }
+//                std::sort(values.begin(), values.end());
+//                int idx = (i * w + j) * c + ch;
+//                output_data[idx] = values[values.size() / 2];
+//            }
+//        }
+//    }
+//
+//    // Write output image file
+//    int success = stbi_write_png("output_medianblur.png", w, h, c, output_data, w * c);
+//
+//    // Free memory
+//    delete[] output_data;
+//}
 
 // Edge Detection
-Image Filter::Sobel(Image img) {
-    double kernel_x[3*3] = {-1, 0, -1, -2, 0, 2, -1, 0, 1};
-    double kernel_y[3*3] = {-1, -2, -1,0, 0, 0,1, 2, 1};
+void Filter::Sobel(Image img) {
 
-    double* d_data = img.change2doubledata(img.get_data()); // double data, 2D array
+    // Create output array
+    int w = img.get_width();
+    int h = img.get_height();
+    int c = img.get_channel();
+    unsigned char* data = img.get_data();
+    unsigned char* p_data = img.padding(data);
+    unsigned char* output = new unsigned char[w * h];
 
-    double* gx = img.conv(d_data,kernel_x);
-    double* gy = img.conv(d_data,kernel_y);
+    // set kernel
+    double kx[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+    double ky[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
-    this->Gx = gx;
-    this->Gy = gy;
+    for (int y = 1; y < h - 1; y++) {
+        for (int x = 1; x < w - 1; x++) {
 
-    return img;
+            // Compute Gx and Gy values using convolution
+            double Gx = 0.0, Gy = 0.0;
+            for (int j = -1; j <= 1; j++) {
+                for (int i = -1; i <= 1; i++) {
+                    double pixel = p_data[(y + j) * w + (x + i)];
+                    Gx += kx[j + 1][i + 1] * pixel;
+                    Gy += ky[j + 1][i + 1] * pixel;
+                }
+            }
+
+            // Compute gradient magnitude and direction
+            double magnitude = std::min(255.0, sqrt(Gx * Gx + Gy * Gy));
+
+            // Store magnitude value in output array
+            output[y * w + x] = static_cast<unsigned char>(magnitude);
+        }
+    }
+
+    // Save image to new filename
+    int success = stbi_write_png("../Output/output_sobel.png", w, h, c, output, w);
+    if (success) { std::cout << "Sobel Succeed!" << std::endl; }
+    else { std::cout << "Sobel Error!" << std::endl; }
+
+
+    // Deallocate memory
+    delete[] output;
+
 }

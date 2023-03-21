@@ -3,6 +3,8 @@
 //
 
 #include "Image.h"
+#include <iostream>
+#include <cmath>
 
 // Constructor
 Image::Image(int w, int h, int c, unsigned char* dat) {
@@ -37,34 +39,39 @@ void Image::set_channel(int c) { this->channel = c; }
 
 void Image::set_data(unsigned char *dat) {this->data = dat;}
 
-void Image::set_out(double *dat) {this->out = dat;}
 
 // other methods
-double *Image::change2doubledata(unsigned char *dat) {
+unsigned char*Image::padding(unsigned char *dat) {
+    int w = this->width;
+    int h = this->height;
     // padding 0 around
-    double d_data[this->height+2][this->width+2];
-    for(int i=1; i<this->height+1; ++i){
-        for(int j=1; j<this->width+1; ++j){
-            d_data[i][j] = static_cast<double>(dat[(i-1)*this->width+(j-1)]);
+    unsigned char p_data[(h+2)*(w+2)];
+    for(int i=0; i<h+2; ++i){
+        for(int j=0; j<w+2; ++j){
+            if(i==0 || i==h+1){p_data[i*w+j]=static_cast<unsigned char>(0);}
+            else if(j==0 || j==w+1){p_data[i*w+j]=static_cast<unsigned char>(0);}
+            else {p_data[i*w+j] = dat[(i-1)*w+(j-1)];}
         }
     }
-    return d_data[0];
+    return p_data;
 }
 
-unsigned char *Image::change2data(double *d_data) {
 
-}
 
-double* Image::conv(double *pad_img_grid, double *kernel){
-    double * result = new double[this->width*this->height];
 
-    for (int i = 1; i < this->height+1; i++){
-        for(int j = 1; j < this->width+1; j++){
+double* Image::conv(double*pad_img_grid, double *kernel){
+    int w = this->width;
+    int h = this->height;
+    double result[w*h];
+
+    for (int i = 1; i < h+1; i++){
+        for(int j = 1; j < w+1; j++){
             double sum = 0.0;
-            sum += (pad_img_grid+i)[j]*kernel[0] + (pad_img_grid+i)[j+1]*kernel[1] + (pad_img_grid+i)[j+2]*kernel[2];
-            sum += (pad_img_grid+i+1)[j]*kernel[3] + (pad_img_grid+i+1)[j+1]*kernel[4] + (pad_img_grid+i+1)[j+2]*kernel[5];
-            sum += (pad_img_grid+i+2)[j]*kernel[6] + (pad_img_grid+i+2)[j+1]*kernel[7] + (pad_img_grid+i+2)[j+2]*kernel[8];
-            result[(i-1)*this->width+(j-1)] = sum;
+            sum += (pad_img_grid+i-1)[j-1]*kernel[0] + (pad_img_grid+i-1)[j]*kernel[1] + (pad_img_grid+i-1)[j+1]*kernel[2];
+            sum += (pad_img_grid+i)[j-1]*kernel[3] + (pad_img_grid+i)[j]*kernel[4] + (pad_img_grid+i)[j+1]*kernel[5];
+            sum += (pad_img_grid+i+1)[j-1]*kernel[6] + (pad_img_grid+i+1)[j]*kernel[7] + (pad_img_grid+i+1)[j+1]*kernel[8];
+            result[(i-1)*w+(j-1)] = sum;
+            //std::cout << sum << " ";
         }
     }
 

@@ -37,7 +37,7 @@ public:
     Image gaussian_blur(const Image& img);
 
     // Edge Detection
-    Image Sobel(Image img);
+    void Sobel(Image img);
 
 };
 

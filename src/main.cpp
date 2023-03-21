@@ -33,7 +33,7 @@ int main() {
     f.auto_color_bal(img);
     f.hist_equal(img);
     f.grayscale(img);
-    f.brightness(img, 255);
+    f.brightness(img, 100);
 
     //Image img2 = f.Sobel(img);
 //    double* out = img.change2doubledata(data);
@@ -44,18 +44,22 @@ int main() {
 //        cout << endl;
 //    }
 
-
     //cout << "hello" << endl;
     // Print image size to screen
     //cout << "Image loaded with size " << w << " x " << h << " with " << c << " channel(s)." << endl;
 
     // Save image to new filename and print log
-    int success = stbi_write_png("../Output/output.png", w, h, c, img.get_data(), 0);
-    if (success) { cout << "Succeed!" << endl; }
-    else { cout << "Error!" << endl; }
+//    int success = stbi_write_png("../Output/output.png", w, h, c, img.get_data(), 0);
+//    if (success) { cout << "Succeed!" << endl; }
+//    else { cout << "Error!" << endl; }
 
     // Deallocate memory
-    //stbi_image_free(data);
+    stbi_image_free(data);
+
+    data = stbi_load("../Images/output_gray.png", &w, &h, &c, 0);
+    Image img2(w, h, c, data);
+
+    f.Sobel(img2);
 
     return 0;
 }
