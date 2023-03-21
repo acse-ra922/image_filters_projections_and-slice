@@ -11,4 +11,6 @@ add_executable(advanced_programming_group_dijkstra
         src/stb_image.h
         src/stb_image_write.h
         src/Image.h
-        src/Image.cpp)
+        src/Image.cpp
+        src/Filter.h
+        src/Filter.cpp)
