@@ -39,8 +39,10 @@ void Image::set_data(unsigned char *dat) {this->data = dat;}
 
 // other methods
 unsigned char*Image::padding(unsigned char *dat) {
+
     int w = this->width;
     int h = this->height;
+
     // padding 0 around
     unsigned char p_data[(h+2)*(w+2)];
     for(int i=0; i<h+2; ++i){

@@ -22,8 +22,8 @@ void Filter::grayscale(Image img) {
 
     // Calculate grayscale values for each pixel
     for (int i = 0; i < w*h; i++) {
-        int gray = 0.299 * data[i * c] + 0.587 * data[i * c + 1] + 0.114 * data[i * c + 2];
-        grayData[i] = std::max(0, std::min(255, gray));
+        double gray = 0.299 * data[i * c] + 0.587 * data[i * c + 1] + 0.114 * data[i * c + 2];
+        grayData[i] = static_cast<unsigned char>(std::max(0.0, std::min(255.0, gray)));
     }
 
     // Set the number of channels to 1
@@ -36,11 +36,10 @@ void Filter::grayscale(Image img) {
 
 
     // Deallocate memory
-    //stbi_image_free(grayData);
     delete[] grayData;
 }
 
-void Filter::auto_color_bal(Image img) {
+void Filter::auto_color_bal(Image img, double red_gain, double green_gain, double blue_gain) {
 
     // initialization
     int w = img.get_width();
@@ -55,16 +54,13 @@ void Filter::auto_color_bal(Image img) {
         balData[i] = data[i];
     }
 
-    const float red_gain = 1.2f;   // Adjust red channel by 20%
-    const float green_gain = 1.0f; // No adjustment to green channel
-    const float blue_gain = 0.8f;  // Adjust blue channel by 20%
     for (int i = 0; i < w * h * c; i += c) {
         int r = balData[i];
         int g = balData[i + 1];
         int b = balData[i + 2];
-        balData[i] = std::min(255, (int)(r * red_gain));
-        balData[i + 1] = std::min(255, (int)(g * green_gain));
-        balData[i + 2] = std::min(255, (int)(b * blue_gain));
+        balData[i] = static_cast<unsigned char>(std::min(255.0, (r * red_gain)));
+        balData[i + 1] = static_cast<unsigned char>(std::min(255.0, (g * green_gain)));
+        balData[i + 2] = static_cast<unsigned char>(std::min(255.0, (b * blue_gain)));
     }
 
     // Save image to new filename
@@ -76,7 +72,7 @@ void Filter::auto_color_bal(Image img) {
     delete[] balData;
 }
 
-void Filter::brightness(Image img, int brightness) {
+void Filter::brightness(Image img, double brightness) {
 
     int w = img.get_width();
     int h = img.get_height();
@@ -87,16 +83,16 @@ void Filter::brightness(Image img, int brightness) {
     unsigned char* brightData = new unsigned char[w * h * c];
 
     // Calculate average pixel value
-    int total = 0;
+    double total = 0.0;
     for (int i = 0; i < w * h * c; i++) {
-        total += data[i];
+        total += static_cast<double>(data[i]);
     }
-    int avg = total / (w * h * c);
+    double avg = total / (w * h * c);
 
     // Calculate brightness adjusted values for each pixel
     for (int i = 0; i < w * h * c; i++) {
-        int val = data[i] + brightness;
-        if (brightness == 0) {
+        double val = static_cast<double>(data[i]) + brightness;
+        if (brightness == 0.0) {
             // Automatic brightness adjustment
             if (data[i] < 128) {
                 val = data[i] * (128 / avg);
@@ -105,7 +101,7 @@ void Filter::brightness(Image img, int brightness) {
                 val = data[i] + (255 - data[i]) * (128 / (255 - avg));
             }
         }
-        brightData[i] = std::max(0, std::min(255, val));
+        brightData[i] = static_cast<unsigned char>(std::max(0.0, std::min(255.0, val)));
     }
 
 
@@ -152,14 +148,14 @@ void Filter::hist_equal(Image img) {
     }
 
     // Normalize intensities
-    float factor = 255.0f / (w * h * c);
+    double factor = 255.0 / (w * h * c);
     for (int i = 0; i < w * h * c; i += c) {
         int r = histData[i];
         int g = histData[i + 1];
         int b = histData[i + 2];
-        histData[i] = std::min(255, (int)(cdf[r] * factor));
-        histData[i + 1] = std::min(255, (int)(cdf[g] * factor));
-        histData[i + 2] = std::min(255, (int)(cdf[b] * factor));
+        histData[i] = static_cast<unsigned char>(std::min(255.0, (cdf[r] * factor)));
+        histData[i + 1] = static_cast<unsigned char>(std::min(255.0, (cdf[g] * factor)));
+        histData[i + 2] = static_cast<unsigned char>(std::min(255.0, (cdf[b] * factor)));
     }
 
     // Save image to new filename
@@ -207,6 +203,109 @@ void Filter::median_blur(Image img, int kernel) {
 
     // Free memory
     delete[] output_data;
+}
+
+void Filter::box_blur(Image img, int kernel) {
+
+    // initialization
+    int w = img.get_width();
+    int h = img.get_height();
+    int c = img.get_channel();
+    unsigned char* data = img.get_data();
+    int k = kernel;
+
+    unsigned char* output_data = new unsigned char[w * h * c];
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            for (int ch = 0; ch < c; ch++) {
+                int sum = 0;
+                for (int ii = std::max(0, i - k); ii <= std::min(h - 1, i + k); ii++) {
+                    for (int jj = std::max(0, j - k); jj <= std::min(w - 1, j + k); jj++) {
+                        int idx = (ii * w + jj) * c + ch;
+                        sum += data[idx];
+                    }
+                }
+                int idx = (i * w + j) * c + ch;
+                output_data[idx] = sum / ((2 * k + 1) * (2 * k + 1));
+            }
+        }
+    }
+
+    // Write output image file
+    int success = stbi_write_png("../Output/output_boxblur.png", w, h, c, output_data, w * c);
+    if (success) { std::cout << "Box Blur Succeed!" << std::endl; }
+    else { std::cout << "Box Blur Error!" << std::endl; }
+
+    // Free memory
+    delete[] output_data;
+}
+
+void Filter::FilterCreation(double **GKernel, int kernel_size, double sigma) {
+    double r, s = 2.0 * sigma * sigma;
+    double sum = 0.0;
+    int half_k = kernel_size / 2;
+    for (int x = -half_k; x <= half_k; x++) {
+        for (int y = -half_k; y <= half_k; y++) {
+            r = x * x + y * y;
+            GKernel[x + half_k][y + half_k] = (exp(-r / s)) / (M_PI * s);
+            sum += GKernel[x + half_k][y + half_k];
+        }
+    }
+    for (int i = 0; i < kernel_size; ++i) {
+        for (int j = 0; j < kernel_size; ++j) {
+            GKernel[i][j] /= sum;
+        }
+    }
+}
+
+void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
+
+    // initialization
+    int w = img.get_width();
+    int h = img.get_height();
+    int c = img.get_channel();
+    unsigned char* data = img.get_data();
+
+    // Allocate memory for the output image
+    unsigned char* output = new unsigned char[w * h * c];
+    double** kernel = new double* [kernel_size];
+    for (int i = 0; i < kernel_size; i++) {
+        kernel[i] = new double[kernel_size];
+    }
+    FilterCreation(kernel, kernel_size, sigma);
+    int k = kernel_size / 2;
+    // Iterate over each pixel in the image
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            for (int ch = 0; ch < c; ch++) {
+                double sum = 0.0;
+                double weightSum = 0.0;
+                for (int ii = std::max(0, i - k); ii <= std::min(h - 1, i + k); ii++) {
+                    for (int jj = std::max(0, j - k); jj <= std::min(w - 1, j + k); jj++) {
+                        // kernel_value
+                        int m = ii - i + k;
+                        int l = jj - j + k;
+                        double weight = kernel[m][l];
+                        int idx = (ii * w + jj) * c + ch;
+                        sum += data[idx] * weight;
+                        weightSum += weight;
+                    }
+                }
+                int idx = (i * w + j) * c + ch;
+                output[idx] = static_cast<unsigned char>(sum / weightSum);
+            }
+        }
+
+        int success = stbi_write_png("../Output/output_gauss.png", w, h, c, output, w * c);
+        if (success) { std::cout << "Gaussian Blur Succeed!" << std::endl; }
+        else { std::cout << "Gaussian Blur Error!" << std::endl; }
+
+        stbi_image_free(output);
+        for (int i = 0; i < kernel_size; i++) {
+            delete[] kernel[i];
+        }
+        delete[] kernel;
+    }
 }
 
 

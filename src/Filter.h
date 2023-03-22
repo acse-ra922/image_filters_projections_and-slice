@@ -27,14 +27,15 @@ public:
 
     // Color Correction
     void grayscale(Image img);
-    void auto_color_bal(Image img);
-    void brightness(Image img, int brightness);
+    void auto_color_bal(Image img, double red_gain, double green_gain, double blue_gain);
+    void brightness(Image img, double brightness);
     void hist_equal(Image img);
 
     // Image Blur
     void median_blur(Image img, int kernel=3);
-    Image box_blur(const Image& img);
-    Image gaussian_blur(const Image& img);
+    void box_blur(Image img, int kernel=3);
+    void gaussian_blur(Image img, int kernel_size, double sigma);
+    void FilterCreation(double** GKernel, int kernel_size, double sigma);
 
     // Edge Detection
     void conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* output);

@@ -33,15 +33,19 @@ int main() {
 
     // Color correction
     cout << "Color Correction: " << endl;
-    f.auto_color_bal(img);
+    f.auto_color_bal(img, 1.2, 1.0, 0.8);  // Increase red channel by 20%, decrease blue channel by 20%
     f.hist_equal(img);
     f.grayscale(img);
-    f.brightness(img, 100);
+    f.brightness(img, 100.0);
     cout << endl;
 
 
     // Blur
+    cout << "Blur: " << endl;
     //f.median_blur(img);
+    f.box_blur(img, 5);
+    f.gaussian_blur(img, 7, 3.0);
+    cout << endl;
 
     //Image img2 = f.Sobel(img);
 //    double* out = img.change2doubledata(data);
