@@ -25,7 +25,6 @@ public:
 
     // edge detection
     void conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* output);
-    void conv_any_kernel(Image img, double* kernel);
     void Sobel(Image img);
     void Prewitt(Image img);
     void Scharr(Image img);

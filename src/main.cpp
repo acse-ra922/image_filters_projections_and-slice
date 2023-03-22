@@ -44,7 +44,7 @@ int main() {
     cout << "Blur: " << endl;
     f.median_blur(img);
     f.box_blur(img, 5);
-    //f.gaussian_blur(img, 7, 3.0);
+    f.gaussian_blur(img, 7, 3.0);
     cout << endl;
 
     //Image img2 = f.Sobel(img);

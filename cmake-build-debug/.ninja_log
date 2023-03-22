@@ -1,20 +1,9 @@
 # ninja log v5
-3	240	1679354928141227224	CMakeFiles/advanced_programming_group_dijkstra.dir/src/utils.cpp.o	7ce1b8bb06756bdb
-882	967	1679494301777105315	advanced_programming_group_dijkstra	62e77b526c68860e
-7	179	1679487086555818972	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o	8ef96f72df5b32dd
-0	158	1679495589797783757	build.ninja	2ff1710275c2f370
-2	854	1679253938713757485	CMakeFiles/advanced_programming_group_dijkstra.dir/src/minimal.cpp.o	5246cdacbd199a68
-1	881	1679494301681708012	CMakeFiles/advanced_programming_group_dijkstra.dir/src/main.cpp.o	5114999b4de5d759
-2	2232	1679494269979962843	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Filter.cpp.o	89d8c6b0f0b2830a
-3	175	1679495595786683791	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o	8ef96f72df5b32dd
-3	675	1679495596281646738	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Filter.cpp.o	89d8c6b0f0b2830a
-2	875	1679495770044281246	CMakeFiles/advanced_programming_group_dijkstra.dir/src/test.cpp.o	e6ac293f5614a75
-875	1142	1679495770322700614	advanced_programming_group_dijkstra	b0e123e0292a2427
-5	893	1679495805365611412	CMakeFiles/advanced_programming_group_dijkstra.dir/src/test.cpp.o	e6ac293f5614a75
-893	979	1679495805461368205	advanced_programming_group_dijkstra	b0e123e0292a2427
-1	896	1679495854259521441	CMakeFiles/advanced_programming_group_dijkstra.dir/src/test.cpp.o	e6ac293f5614a75
-897	978	1679495854351782162	advanced_programming_group_dijkstra	b0e123e0292a2427
-2	1032	1679495957348642490	CMakeFiles/advanced_programming_group_dijkstra.dir/src/test.cpp.o	e6ac293f5614a75
-1033	1123	1679495957448426258	advanced_programming_group_dijkstra	b0e123e0292a2427
 2	923	1679496100904316578	CMakeFiles/advanced_programming_group_dijkstra.dir/src/test.cpp.o	e6ac293f5614a75
-923	1011	1679496101009469686	advanced_programming_group_dijkstra	b0e123e0292a2427
+4	760	1679502746680756779	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Filter.cpp.o	e7ecd3e448b83c08
+3	952	1679502746875696602	CMakeFiles/advanced_programming_group_dijkstra.dir/src/main.cpp.o	31766bd1be2358d3
+2	854	1679253938713757485	CMakeFiles/advanced_programming_group_dijkstra.dir/src/minimal.cpp.o	5246cdacbd199a68
+1	269	1679502751042140273	build.ninja	2ff1710275c2f370
+3	283	1679502746210190816	CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o	1624288127e1128f
+956	1070	1679502747003196046	advanced_programming_group_dijkstra	62e77b526c68860e
+3	240	1679354928141227224	CMakeFiles/advanced_programming_group_dijkstra.dir/src/utils.cpp.o	7ce1b8bb06756bdb

@@ -199,8 +199,8 @@ void Filter::median_blur(Image img, int kernel) {
     int c = img.get_channel();
     unsigned char* data = img.get_data();
     int k = kernel;
-
     unsigned char* output_data = new unsigned char[w * h * c];
+
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
             for (int ch = 0; ch < c; ch++) {
@@ -217,6 +217,11 @@ void Filter::median_blur(Image img, int kernel) {
             }
         }
     }
+
+
+    //double ke[25] = {0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04,0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04,0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04};
+
+    //this->conv_any_kernel(img, ke, 5, output_data);
 
     // Write output image file
     int success = stbi_write_png("../Output/output_medianblur.png", w, h, c, output_data, w * c);
@@ -290,44 +295,57 @@ void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
 
     // Allocate memory for the output image
     unsigned char* output = new unsigned char[w * h * c];
+
+    // Allocate memory for the Gaussian kernel
     double** kernel = new double* [kernel_size];
     for (int i = 0; i < kernel_size; i++) {
         kernel[i] = new double[kernel_size];
     }
+
+    // Compute the Gaussian kernel
     FilterCreation(kernel, kernel_size, sigma);
+
     int k = kernel_size / 2;
+
+
     // Iterate over each pixel in the image
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
             for (int ch = 0; ch < c; ch++) {
                 double sum = 0.0;
                 double weightSum = 0.0;
+
                 for (int ii = std::max(0, i - k); ii <= std::min(h - 1, i + k); ii++) {
                     for (int jj = std::max(0, j - k); jj <= std::min(w - 1, j + k); jj++) {
                         // kernel_value
                         int m = ii - i + k;
                         int l = jj - j + k;
                         double weight = kernel[m][l];
+
                         int idx = (ii * w + jj) * c + ch;
                         sum += data[idx] * weight;
                         weightSum += weight;
+
                     }
                 }
+
+                // Normalize the sum of pixel values by the sum of weights
                 int idx = (i * w + j) * c + ch;
                 output[idx] = static_cast<unsigned char>(sum / weightSum);
             }
         }
-
-        int success = stbi_write_png("../Output/output_gauss.png", w, h, c, output, w * c);
-        if (success) { std::cout << "Gaussian Blur Succeed!" << std::endl; }
-        else { std::cout << "Gaussian Blur Error!" << std::endl; }
-
-        stbi_image_free(output);
-        for (int i = 0; i < kernel_size; i++) {
-            delete[] kernel[i];
-        }
-        delete[] kernel;
     }
+
+    // Write the output image to file
+    int success = stbi_write_png("../Output/output_gauss.png", w, h, c, output, w * c);
+    if (success) { std::cout << "Gaussian Blur Succeed!" << std::endl; }
+    else { std::cout << "Gaussian Blur Error!" << std::endl; }
+
+    for (int i = 0; i < kernel_size; i++) {
+        delete[] kernel[i];
+    }
+    delete[] kernel;
+
 }
 
 
@@ -359,8 +377,6 @@ void Filter::conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* o
             output[x * w + y] = static_cast<unsigned char>(magnitude);
         }
     }
-
-
 
 }
 

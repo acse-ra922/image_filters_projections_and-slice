@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 project(advanced_programming_group_dijkstra)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(src)
 
 add_executable(advanced_programming_group_dijkstra
-        src/test.cpp
+        src/main.cpp
         src/utils.h
         src/stb_image.h
         src/stb_image_write.h
