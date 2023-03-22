@@ -24,28 +24,56 @@ int main() {
     unsigned char *data;
 
     // Read in image file
-    data = stbi_load("../Images/gracehopper.png", &w, &h, &c, 0);
+    cout << "Welcome to Djikstra Group Project: " << endl;
+    cout << "Please enter a path for the image"<< endl;
+    string path;
+    getline(cin, path);
+    if(path.length()==0)
+    {
+        data = stbi_load("../Images/gracehopper.png",&w,&h,&c,0);
+    }
+    else{
+        data = stbi_load(path.c_str(), &w, &h, &c, 0);
+    }
 
     // Create Image object
     Image img(w, h, c, data);
-
     Filter f;
 
-    // Color correction
-    cout << "Color Correction: " << endl;
+    cout<< "Color Correction"<<endl;
+    cout<< "The following functions are being performed on the image right now"<<endl;
+    cout<< "1. Automatic Color Balance"<<endl;
     f.auto_color_bal(img);
+    cout <<"2. Histogram Equalisation" <<endl;
     f.hist_equal(img);
+    cout<< "3. Grayscale"<<endl;
     f.grayscale(img);
-    f.brightness(img, 100.0);
+    cout<<"4. Brightness"<<endl;
+    int brightness;
+    cout<<"Please enter an integer/float value for brightness"<<endl;
+    cin>>brightness;
+    f.brightness(img, brightness);
     cout << endl;
 
 
     // Blur
-    cout << "Blur: " << endl;
-    f.median_blur(img);
-    f.box_blur(img, 5);
-    //f.gaussian_blur(img, 7, 3.0);
-    cout << endl;
+    cout << "Blur " << endl;
+    cout << "1. Median Blur" <<endl;
+    cout<< "Please specify kernel size" <<endl;
+    int k;
+    cin>>k;
+    f.median_blur(img,k);
+    cout<< "2. Box Blur"<<endl;
+    cout<<"Please specify kernel size" <<endl;
+    int ker;
+    cin>>ker;
+    f.box_blur(img, ker);
+    cout<<"3. Gaussian Blur"<<endl;
+    cout<<"Please specify kernel size" <<endl;
+    int kern;
+    cin>>kern;
+    f.gaussian_blur(img, kern, 3.0);
+
 
     //Image img2 = f.Sobel(img);
 //    double* out = img.change2doubledata(data);
@@ -74,9 +102,13 @@ int main() {
 
     // Edge detection
     cout << "Edge Detection:" << endl;
+    cout<<"1. Sobel"<<endl;
     f.Sobel(img2);
+    cout<<"2. Prewitt"<< endl;
     f.Prewitt(img2);
+    cout <<"3. Scharr" <<endl;
     f.Scharr(img2);
+    cout<<"4. Roberts" <<endl;
     f.Roberts(img2);
     cout << endl;
 

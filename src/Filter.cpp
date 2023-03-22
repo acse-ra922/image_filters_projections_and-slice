@@ -18,6 +18,8 @@ void Filter::grayscale(Image img) {
     int h = img.get_height();
     int c = img.get_channel();
     unsigned char* data = img.get_data();
+
+    // Allocate memory
     unsigned char* grayData = new unsigned char[w * h];
 
     // Calculate grayscale values for each pixel
@@ -30,7 +32,7 @@ void Filter::grayscale(Image img) {
     c = 1;
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_gray.png", w, h, c, grayData, w);
+    int success = stbi_write_png("../Output/output_gray.png", w, h, c, grayData, w*c);
     if (success) { std::cout << "Grayscale Succeed!" << std::endl; }
     else { std::cout << "Grayscale Error!" << std::endl; }
 
@@ -39,7 +41,7 @@ void Filter::grayscale(Image img) {
     delete[] grayData;
 }
 
-void Filter::auto_color_bal(Image img, double red_gain, double green_gain, double blue_gain) {
+void Filter::auto_color_bal(Image img) {
 
     // initialization
     int w = img.get_width();
@@ -50,21 +52,39 @@ void Filter::auto_color_bal(Image img, double red_gain, double green_gain, doubl
     // Allocate memory
     unsigned char* balData = new unsigned char[w * h * c];
 
+    // copy the data
     for(int i=0; i<w*h*c; ++i){
         balData[i] = data[i];
     }
 
+    // Calculate histogram
+    double sumR = 0;
+    double sumG = 0;
+    double sumB = 0;
+
     for (int i = 0; i < w * h * c; i += c) {
-        int r = balData[i];
-        int g = balData[i + 1];
-        int b = balData[i + 2];
-        balData[i] = static_cast<unsigned char>(std::min(255.0, (r * red_gain)));
-        balData[i + 1] = static_cast<unsigned char>(std::min(255.0, (g * green_gain)));
-        balData[i + 2] = static_cast<unsigned char>(std::min(255.0, (b * blue_gain)));
+        sumR += static_cast<double>(balData[i]);
+        sumG += static_cast<double>(balData[i + 1]);
+        sumB += static_cast<double>(balData[i + 2]);
+    }
+
+    // Compute CDF
+    double ratioR = sumR/w/h/127;
+    double ratioG = sumG/w/h/127;
+    double ratioB = sumB/w/h/127;
+
+    for (int i = 0; i < w * h * c; i += c) {
+        double r = static_cast<double>(balData[i]);
+        double g = static_cast<double>(balData[i + 1]);
+        double b = static_cast<double>(balData[i + 2]);
+
+        balData[i] = static_cast<unsigned char>(std::min(255.0, std::max(0.0,r * ratioR)));
+        balData[i + 1] = static_cast<unsigned char>(std::min(255.0, std::max(0.0,g * ratioG)));
+        balData[i + 2] = static_cast<unsigned char>(std::min(255.0, std::max(0.0,b * ratioB)));
     }
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_bal.png", w, h, c, balData, 0);
+    int success = stbi_write_png("../Output/output_bal.png", w, h, c, balData, w*c);
     if (success) { std::cout << "Auto Color Balance Succeed!" << std::endl; }
     else { std::cout << "Auto Color Balance Error!" << std::endl; }
 
@@ -122,8 +142,10 @@ void Filter::hist_equal(Image img) {
     int c = img.get_channel();
     unsigned char* data = img.get_data();
 
+    // Allocate memory
     unsigned char* histData = new unsigned char[w * h * c];
 
+    // copy the data
     for(int i=0; i<w*h*c; ++i){
         histData[i] = data[i];
     }
@@ -131,9 +153,9 @@ void Filter::hist_equal(Image img) {
     // Calculate histogram
     int hist[256] = { 0 };
     for (int i = 0; i < w * h * c; i += c) {
-        int r = histData[i];
-        int g = histData[i + 1];
-        int b = histData[i + 2];
+        int r = static_cast<int>(data[i]);
+        int g = static_cast<int>(data[i + 1]);
+        int b = static_cast<int>(data[i + 2]);
         hist[r]++;
         hist[g]++;
         hist[b]++;
@@ -150,16 +172,16 @@ void Filter::hist_equal(Image img) {
     // Normalize intensities
     double factor = 255.0 / (w * h * c);
     for (int i = 0; i < w * h * c; i += c) {
-        int r = histData[i];
-        int g = histData[i + 1];
-        int b = histData[i + 2];
+        int r = static_cast<int>(histData[i]);
+        int g = static_cast<int>(histData[i + 1]);
+        int b = static_cast<int>(histData[i + 2]);
         histData[i] = static_cast<unsigned char>(std::min(255.0, (cdf[r] * factor)));
         histData[i + 1] = static_cast<unsigned char>(std::min(255.0, (cdf[g] * factor)));
         histData[i + 2] = static_cast<unsigned char>(std::min(255.0, (cdf[b] * factor)));
     }
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_hist.png", w, h, c, histData, 0);
+    int success = stbi_write_png("../Output/output_hist.png", w, h, c, histData, w*c);
     if (success) { std::cout << "Hist Equal Succeed!" << std::endl; }
     else { std::cout << "Hist Equal Error!" << std::endl; }
 
@@ -356,7 +378,7 @@ void Filter::Sobel(Image img) {
     this->conv_3_3_kernel(img, kx, ky, output);
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_sobel.png", w, h, c, output, w);
+    int success = stbi_write_png("../Output/output_sobel.png", w, h, c, output, w*c);
     if (success) { std::cout << "Sobel Succeed!" << std::endl; }
     else { std::cout << "Sobel Error!" << std::endl; }
 
@@ -380,7 +402,7 @@ void Filter::Prewitt(Image img) {
     this->conv_3_3_kernel(img, kx, ky, output);
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_prewitt.png", w, h, c, output, w);
+    int success = stbi_write_png("../Output/output_prewitt.png", w, h, c, output, w*c);
     if (success) { std::cout << "Prewitt Succeed!" << std::endl; }
     else { std::cout << "Prewitt Error!" << std::endl; }
 
@@ -404,10 +426,45 @@ void Filter::Scharr(Image img) {
     this->conv_3_3_kernel(img, kx, ky, output);
 
     // Save image to new filename
-    int success = stbi_write_png("../Output/output_scharr.png", w, h, c, output, w);
+    int success = stbi_write_png("../Output/output_scharr.png", w, h, c, output, w*c);
     if (success) { std::cout << "Scharr Succeed!" << std::endl; }
     else { std::cout << "Scharr Error!" << std::endl; }
 
+
+    // Deallocate memory
+    delete[] output;
+}
+
+void Filter::Roberts(Image img) {
+
+    int w = img.get_width();
+    int h = img.get_height();
+    int c = img.get_channel();
+    unsigned char* data = img.get_data();
+    unsigned char* output = new unsigned char[w*h];
+
+    // Apply Roberts cross filter
+    for (int i = 0; i < w - 1; i++)
+    {
+        for (int j = 0; j < h - 1; j++)
+        {
+            double pixel_top_left = static_cast<double>(data[(j * w + i)]);
+            double pixel_top_right = static_cast<double>(data[(j * w + i + 1)]);
+            double pixel_bottom_left = static_cast<double>(data[((j + 1) * w + i)]);
+            double pixel_bottom_right = static_cast<double>(data[((j + 1) * w + i + 1)]);
+
+            double value = std::abs(pixel_top_left - pixel_bottom_right) +
+                                 std::abs(pixel_top_right - pixel_bottom_left);
+
+            // Set the pixel value after applying the filter
+            output[(j * w + i)] = static_cast<unsigned char>(value);
+        }
+    }
+
+    // Save image to new filename
+    int success = stbi_write_png("../Output/output_roberts.png", w, h, c, output, w*c);
+    if (success) { std::cout << "Roberts Succeed!" << std::endl; }
+    else { std::cout << "Roberts Error!" << std::endl; }
 
     // Deallocate memory
     delete[] output;

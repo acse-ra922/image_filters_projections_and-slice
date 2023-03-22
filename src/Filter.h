@@ -9,39 +9,27 @@
 
 
 class Filter {
-private:
-    double * Gx;
-    double * Gy;
-    double * G;
-
 public:
-    // get methods
-    double* get_gx();
-    double* get_gy();
-    double* get_g();
 
-    // set methods
-    void set_gx(double* gx);
-    void set_gy(double* gy);
-    void set_g(double* g);
-
-    // Color Correction
+    // color correction
     void grayscale(Image img);
-    void auto_color_bal(Image img, double red_gain, double green_gain, double blue_gain);
-    void brightness(Image img, double brightness);
+    void auto_color_bal(Image img);
+    void brightness(Image img, double brightness=50.0);
     void hist_equal(Image img);
 
-    // Image Blur
+    // image blur
     void median_blur(Image img, int kernel=3);
     void box_blur(Image img, int kernel=3);
     void gaussian_blur(Image img, int kernel_size, double sigma);
     void FilterCreation(double** GKernel, int kernel_size, double sigma);
 
-    // Edge Detection
+    // edge detection
     void conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* output);
+    void conv_any_kernel(Image img, double* kernel);
     void Sobel(Image img);
     void Prewitt(Image img);
     void Scharr(Image img);
+    void Roberts(Image img);
 
 };
 

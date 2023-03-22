@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(src)
 
 add_executable(advanced_programming_group_dijkstra
-        src/main.cpp
+        src/test.cpp
         src/utils.h
         src/stb_image.h
         src/stb_image_write.h

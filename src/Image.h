@@ -34,9 +34,6 @@ public:
 
     unsigned char* padding(unsigned char* dat);  // padding 0, 1D array
 
-    double* conv(double*pad_img_grid, double *kernel);
-
-
 };
 
 
