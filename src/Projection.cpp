@@ -21,7 +21,8 @@ Projection::Projection(const std::string directory):
 // Destructor
 Projection::~Projection()
 {
-	delete data;
+    if (this->data != nullptr)
+        stbi_image_free(this->data);
 }
 
 // Private helper function
@@ -273,7 +274,12 @@ unsigned char* Projection::avg_ip(int zmin, int zmax)
 }
 
 // Usage:
-/*Projection proj("Scans\\fracture");
-    unsigned char* data = proj.min_ip(600, 800);
-    int success = stbi_write_png("MinIP_fracture_600_800.png",
-        proj.get_width(), proj.get_height(), 1, data, 0);*/
+/*
+#define STB_IMAGE_IMPLEMENTATION
+#include "Projection.h"
+
+Projection proj("Scans\\fracture");
+unsigned char* data = proj.min_ip(600, 800);
+int success = stbi_write_png("MinIP_fracture_600_800.png",
+        proj.get_width(), proj.get_height(), 1, data, 0);
+*/
