@@ -3,21 +3,32 @@
 //
 
 #pragma once
+#include <vector>
 
-//unsigned char2double(char ch){
-//    return static_cast<double>(ch);
-//}
+template <typename T>
+void quickSort(std::vector<T> &arr, int left, int right) {
+    int i = left, j = right;
+    T tmp;
+    T pivot = arr[(left + right) / 2];
 
-//double conv_unit(double *img_grid, double *kernel, int k_size, int x_pos, int y_pos){
-//    double sum = 0.0;
-//    for (int i = 0; i < k_size; i++){
-//        for(int j = 0; j < k_size; j++){
-//            sum += (img_grid+i+x_pos)[j+y_pos]*kernel[i*k_size+j];
-//        }
-//    }
-//    return sum;
-//}
+    /* partition */
+    while (i <= j) {
+        while (arr[i] < pivot)
+            i++;
+        while (arr[j] > pivot)
+            j--;
+        if (i <= j) {
+            tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            i++;
+            j--;
+        }
+    };
 
-
-
-
+    /* recursion */
+    if (left < j)
+        quickSort(arr, left, j);
+    if (i < right)
+        quickSort(arr, i, right);
+}

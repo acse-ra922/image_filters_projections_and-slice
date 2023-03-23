@@ -1,6 +1,10 @@
-//
-// Created by Wang, Yuyang on 19/03/2023.
-//
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
+
 
 #include <iostream>
 #include <string>
@@ -10,8 +14,10 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include "Volume.h"
+#include "utils.h"
 namespace fs = std::filesystem;
 
+Volume::Volume() {}
 
 // Constructor
 Volume::Volume(std::string data_dir) {
@@ -28,6 +34,8 @@ Volume::Volume(std::string data_dir) {
         std::cerr << "No image files found in directory " << data_dir << std::endl;
         return;
     }
+
+    quickSort(files, 0, files.size()-1);
 
     // calculate the total size of the data
     int w, h, c;
@@ -95,6 +103,10 @@ int Volume::get_depth() { return this->depth; }
 unsigned char* Volume::get_data() { return this->data; }
 
 std::vector<std::string> Volume::get_outdir() {return this->outdir;}
+
+int Volume::get_img_size() {return this->img_size;}
+
+int Volume::get_total_size() {return this->total_size;}
 
 void Volume::set_width(int w) { this->width = w; }
 
@@ -243,3 +255,30 @@ void Volume::Gaussian3D(Volume v, std::string outdir, int filterSize, double sig
     std::vector<double> processedVolume = apply3DGaussianFilter(v, filterSize, sigma);
     this->writeImages(processedVolume, outdir, "3D_Gaussian");
 }
+
+//void Volume::quickSort(std::vector<std::string> &arr, int left, int right) {
+//    int i = left, j = right;
+//    std::string tmp;
+//    std::string pivot = arr[(left + right) / 2];
+//
+//    /* partition */
+//    while (i <= j) {
+//        while (arr[i] < pivot)
+//            i++;
+//        while (arr[j] > pivot)
+//            j--;
+//        if (i <= j) {
+//            tmp = arr[i];
+//            arr[i] = arr[j];
+//            arr[j] = tmp;
+//            i++;
+//            j--;
+//        }
+//    };
+//
+//    /* recursion */
+//    if (left < j)
+//        quickSort(arr, left, j);
+//    if (i < right)
+//        quickSort(arr, i, right);
+//}

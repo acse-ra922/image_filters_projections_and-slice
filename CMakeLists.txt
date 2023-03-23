@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src)
 
 add_executable(advanced_programming_group_dijkstra
-        src/main.cpp
+        src/demo.cpp
         src/utils.h
         src/stb_image.h
         src/stb_image_write.h
@@ -15,4 +15,6 @@ add_executable(advanced_programming_group_dijkstra
         src/Filter.h
         src/Filter.cpp
         src/Volume.h
-        src/Volume.cpp)
+        src/Volume.cpp
+        src/Slice.h
+        src/Slice.cpp)
