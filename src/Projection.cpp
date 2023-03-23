@@ -5,13 +5,11 @@
 
 #include <vector>
 #include <string>
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include <filesystem>
 namespace fs = std::filesystem;
 
 #include "Projection.h"
+
 
 // Constructor
 Projection::Projection(const std::string directory):
