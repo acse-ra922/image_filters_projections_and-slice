@@ -1,6 +1,6 @@
 //
 // Created by Wang, Yuyang on 19/03/2023.
-// Implemented by Yang, Yi on 21/03/2023.
+// Written by Yang, Yi on 21/03/2023.
 //
 
 #include <vector>
@@ -22,6 +22,30 @@ Projection::Projection(const std::string directory):
 Projection::~Projection()
 {
 	delete data;
+}
+
+// Private helper function
+/*
+    Compute correct z range of the user specified thin slab
+
+    @param
+    ----------
+    zmin, zmax: minimum and maximum z specified by user
+*/
+void Projection::find_z_range(const int& zmin, const int& zmax)
+{
+    if (zmin == NULL)
+        this->zmin = 0;
+    else
+        this->zmin = fmax(zmin, 0);
+    if (zmax == NULL)
+        this->zmax = this->file_size;
+    else
+        this->zmax = fmin(zmax, this->file_size);
+
+    // Make sure zmin is smaller than zmax
+    if (this->zmin > this->zmax)
+        this->zmin = this->zmax - 1;
 }
 
 // Get functions
@@ -50,26 +74,10 @@ int Projection::get_zmax()
 	return this->zmax;
 }
 
-//// Set functions
-//void Projection::set_zmin(const int& z_min)
-//{
-//	if (z_min < 0)
-//	{
-//		std::cerr << "Invalid minimum z\n";
-//		return;
-//	}
-//	this->zmin = z_min;
-//}
-//
-//void Projection::set_zmax(const int& z_max)
-//{
-//	if (z_max < 0)
-//	{
-//		std::cerr << "Invalid maximum z\n";
-//		return;
-//	}
-//	this->zmax = z_max;
-//}
+int Projection::get_file_size()
+{
+    return this->file_size;
+}
 
 // Orthographic projection functions
 
@@ -94,15 +102,8 @@ unsigned char* Projection::max_ip(int zmin, int zmax)
         files.push_back(entry.path().u8string());
 
     // Calculate minimum and maximum z
-    int file_size = files.size();
-    if (zmin == NULL)
-        this->zmin = 0;
-    else
-        this->zmin = fmax(zmin, 0);
-    if (zmax == NULL)
-        this->zmax = file_size;
-    else
-        this->zmax = fmin(zmax, file_size);
+    this->file_size = files.size();
+    this->find_z_range(zmin, zmax);
 
     // Define and write output
     if (this->data)
@@ -159,15 +160,8 @@ unsigned char* Projection::min_ip(int zmin, int zmax)
         files.push_back(entry.path().u8string());
 
     // Calculate minimum and maximum z
-    int file_size = files.size();
-    if (zmin == NULL)
-        this->zmin = 0;
-    else
-        this->zmin = fmax(zmin, 0);
-    if (zmax == NULL)
-        this->zmax = file_size;
-    else
-        this->zmax = fmin(zmax, file_size);
+    this->file_size = files.size();
+    this->find_z_range(zmin, zmax);
 
     // Define and write output
     if (this->data)
@@ -224,15 +218,8 @@ unsigned char* Projection::avg_ip(int zmin, int zmax)
         files.push_back(entry.path().u8string());
 
     // Calculate minimum and maximum z
-    int file_size = files.size();
-    if (zmin == NULL)
-        this->zmin = 0;
-    else
-        this->zmin = fmax(zmin, 0);
-    if (zmax == NULL)
-        this->zmax = file_size;
-    else
-        this->zmax = fmin(zmax, file_size);
+    this->file_size = files.size();
+    this->find_z_range(zmin, zmax);
 
     // Define and write output
     if (this->data)
@@ -284,3 +271,9 @@ unsigned char* Projection::avg_ip(int zmin, int zmax)
 
     return this->data;
 }
+
+// Usage:
+/*Projection proj("Scans\\fracture");
+    unsigned char* data = proj.min_ip(600, 800);
+    int success = stbi_write_png("MinIP_fracture_600_800.png",
+        proj.get_width(), proj.get_height(), 1, data, 0);*/

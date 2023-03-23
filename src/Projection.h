@@ -1,6 +1,6 @@
 //
 // Created by Wang, Yuyang on 19/03/2023.
-// Implemented by Yang, Yi on 21/03/2023.
+// Written by Yang, Yi on 21/03/2023.
 //
 
 #pragma once
@@ -13,11 +13,15 @@ class Projection
 {
 private:
 	std::string data_dir;
+	int file_size = -1;
 	int width = -1;
 	int height = -1;
 	int zmin = -1;
 	int zmax = -1;
 	unsigned char* data = nullptr;
+
+	// Helper function
+	void find_z_range(const int& zmin, const int& zmax);
 
 public:
 	// Constructor
@@ -32,10 +36,7 @@ public:
 	int get_height();
 	int get_zmin();
 	int get_zmax();
-
-	//// Set functions
-	//void set_zmin(const int& z_min);
-	//void set_zmax(const int& z_max);
+	int get_file_size();
 
 	// Orthographic projection functions
 	unsigned char* max_ip(int zmin = NULL, int zmax = NULL);
