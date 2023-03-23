@@ -88,9 +88,7 @@ Volume::Volume(std::string data_dir) {
 }
 
 // Destructor
-Volume::~Volume() {
-    //delete data;
-}
+Volume::~Volume() {}
 
 int Volume::get_width() { return this->width; }
 
@@ -130,6 +128,7 @@ void Volume::writeImages(std::vector<double> processedVolume, std::string outdir
         std::vector<unsigned char> data(width * height);
         std::cout << outputPath << std::endl;
 
+        // for each save dir, write the image
         for (int j = 0; j < width * height; ++j)
         {
             data[j] = static_cast<unsigned char>(processedVolume[j + (width * height * i)]);
@@ -141,8 +140,6 @@ void Volume::writeImages(std::vector<double> processedVolume, std::string outdir
 }
 
 std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, double sigma) {
-    //assert(filterSize % 2 == 1);
-
     unsigned char* volume = v.get_data();
     int width = v.get_width();
     int height = v.get_height();
@@ -151,7 +148,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
     int halfFilterSize = filterSize / 2;
     std::vector<double> result(width*height*depth);
 
-    double sum = 0.0f;
+    double sum = 0.0;
     std::vector<double> kernel(filterSize * filterSize * filterSize);
     for (int z = -halfFilterSize; z <= halfFilterSize; ++z)
     {
@@ -178,7 +175,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
         {
             for (int x = 0; x < width; ++x)
             {
-                double sum = 0.0f;
+                double sum = 0.0;
                 for (int kz = -halfFilterSize; kz <= halfFilterSize; ++kz)
                 {
                     for (int ky = -halfFilterSize; ky <= halfFilterSize; ++ky)
@@ -205,7 +202,6 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
 }
 
 std::vector<double> Volume::apply3DMedianFilter(Volume v, int filterSize) {
-    //assert(filterSize % 2 == 1);
     unsigned char* volume = v.get_data();
     int width = v.get_width();
     int height = v.get_height();
@@ -255,30 +251,3 @@ void Volume::Gaussian3D(Volume v, std::string outdir, int filterSize, double sig
     std::vector<double> processedVolume = apply3DGaussianFilter(v, filterSize, sigma);
     this->writeImages(processedVolume, outdir, "3D_Gaussian");
 }
-
-//void Volume::quickSort(std::vector<std::string> &arr, int left, int right) {
-//    int i = left, j = right;
-//    std::string tmp;
-//    std::string pivot = arr[(left + right) / 2];
-//
-//    /* partition */
-//    while (i <= j) {
-//        while (arr[i] < pivot)
-//            i++;
-//        while (arr[j] > pivot)
-//            j--;
-//        if (i <= j) {
-//            tmp = arr[i];
-//            arr[i] = arr[j];
-//            arr[j] = tmp;
-//            i++;
-//            j--;
-//        }
-//    };
-//
-//    /* recursion */
-//    if (left < j)
-//        quickSort(arr, left, j);
-//    if (i < right)
-//        quickSort(arr, i, right);
-//}

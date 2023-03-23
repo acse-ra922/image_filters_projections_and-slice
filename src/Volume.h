@@ -14,7 +14,6 @@
 
 class Volume {
 protected:
-//private:
     int width;
     int height;
     int depth;
@@ -56,8 +55,6 @@ public:
     std::vector<double> apply3DGaussianFilter(Volume v, int filterSize, double sigma);
     void Median3D(Volume v, std::string outdir, int filterSize);
     void Gaussian3D(Volume v, std::string outdir, int filterSize, double sigma);
-
-    //void quickSort(std::vector<std::string>& arr, int left, int right);
 
 };
 

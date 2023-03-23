@@ -9,10 +9,10 @@
 #include <iostream>
 #include "Filter.h"
 #include "utils.h"
-#include <cmath> // std::max, std::min
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include <vector>
+#include <cmath> // std::max, std::min
 
 // Color Correction
 void Filter::grayscale(Image img) {
@@ -61,7 +61,6 @@ void Filter::auto_color_bal(Image img) {
         balData[i] = data[i];
     }
 
-    // Calculate histogram
 //    double sumR = 0;
 //    double sumG = 0;
 //    double sumB = 0;
@@ -72,7 +71,6 @@ void Filter::auto_color_bal(Image img) {
 //        sumB += static_cast<double>(balData[i + 2]);
 //    }
 
-    // Compute CDF
 //    double ratioR = sumR/w/h/127;
 //    double ratioG = sumG/w/h/127;
 //    double ratioB = sumB/w/h/127;
@@ -102,6 +100,7 @@ void Filter::auto_color_bal(Image img) {
 
 void Filter::brightness(Image img, double brightness) {
 
+    // initialization
     int w = img.get_width();
     int h = img.get_height();
     int c = img.get_channel();
@@ -364,6 +363,7 @@ void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
     if (success) { std::cout << "Gaussian Blur Succeed!" << std::endl; }
     else { std::cout << "Gaussian Blur Error!" << std::endl; }
 
+    // Free memory
     for (int i = 0; i < kernel_size; i++) {
         delete[] kernel[i];
     }
@@ -421,7 +421,6 @@ void Filter::Sobel(Image img) {
     if (success) { std::cout << "Sobel Succeed!" << std::endl; }
     else { std::cout << "Sobel Error!" << std::endl; }
 
-
     // Deallocate memory
     delete[] output;
 
@@ -445,7 +444,6 @@ void Filter::Prewitt(Image img) {
     if (success) { std::cout << "Prewitt Succeed!" << std::endl; }
     else { std::cout << "Prewitt Error!" << std::endl; }
 
-
     // Deallocate memory
     delete[] output;
 
@@ -468,7 +466,6 @@ void Filter::Scharr(Image img) {
     int success = stbi_write_png("../Output/output_scharr.png", w, h, c, output, w*c);
     if (success) { std::cout << "Scharr Succeed!" << std::endl; }
     else { std::cout << "Scharr Error!" << std::endl; }
-
 
     // Deallocate memory
     delete[] output;

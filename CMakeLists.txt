@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src)
 
 add_executable(advanced_programming_group_dijkstra
-        src/demo.cpp
         src/utils.h
         src/stb_image.h
         src/stb_image_write.h
@@ -17,4 +16,5 @@ add_executable(advanced_programming_group_dijkstra
         src/Volume.h
         src/Volume.cpp
         src/Slice.h
-        src/Slice.cpp)
+        src/Slice.cpp
+        src/main_3D.cpp)
