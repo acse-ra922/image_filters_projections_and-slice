@@ -1,6 +1,10 @@
-//
-// Created by Wang, Yuyang on 19/03/2023.
-//
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
+
 
 #include <iostream>
 #include "Filter.h"
@@ -58,20 +62,24 @@ void Filter::auto_color_bal(Image img) {
     }
 
     // Calculate histogram
-    double sumR = 0;
-    double sumG = 0;
-    double sumB = 0;
-
-    for (int i = 0; i < w * h * c; i += c) {
-        sumR += static_cast<double>(balData[i]);
-        sumG += static_cast<double>(balData[i + 1]);
-        sumB += static_cast<double>(balData[i + 2]);
-    }
+//    double sumR = 0;
+//    double sumG = 0;
+//    double sumB = 0;
+//
+//    for (int i = 0; i < w * h * c; i += c) {
+//        sumR += static_cast<double>(balData[i]);
+//        sumG += static_cast<double>(balData[i + 1]);
+//        sumB += static_cast<double>(balData[i + 2]);
+//    }
 
     // Compute CDF
-    double ratioR = sumR/w/h/127;
-    double ratioG = sumG/w/h/127;
-    double ratioB = sumB/w/h/127;
+//    double ratioR = sumR/w/h/127;
+//    double ratioG = sumG/w/h/127;
+//    double ratioB = sumB/w/h/127;
+
+    double ratioR = 1.2;
+    double ratioG = 0.8;
+    double ratioB = 1.0;
 
     for (int i = 0; i < w * h * c; i += c) {
         double r = static_cast<double>(balData[i]);
@@ -150,34 +158,59 @@ void Filter::hist_equal(Image img) {
         histData[i] = data[i];
     }
 
-    // Calculate histogram
     int hist[256] = { 0 };
-    for (int i = 0; i < w * h * c; i += c) {
-        int r = static_cast<int>(data[i]);
-        int g = static_cast<int>(data[i + 1]);
-        int b = static_cast<int>(data[i + 2]);
-        hist[r]++;
-        hist[g]++;
-        hist[b]++;
-    }
-
-    // Compute CDF
     int cdf[256] = { 0 };
-    int sum = 0;
-    for (int i = 0; i < 256; i++) {
-        sum += hist[i];
-        cdf[i] = sum;
-    }
-
-    // Normalize intensities
     double factor = 255.0 / (w * h * c);
-    for (int i = 0; i < w * h * c; i += c) {
-        int r = static_cast<int>(histData[i]);
-        int g = static_cast<int>(histData[i + 1]);
-        int b = static_cast<int>(histData[i + 2]);
-        histData[i] = static_cast<unsigned char>(std::min(255.0, (cdf[r] * factor)));
-        histData[i + 1] = static_cast<unsigned char>(std::min(255.0, (cdf[g] * factor)));
-        histData[i + 2] = static_cast<unsigned char>(std::min(255.0, (cdf[b] * factor)));
+
+    if(c==1){
+        // Calculate histogram
+        for (int i = 0; i < w * h; i++) {
+            int color = static_cast<int>(histData[i]);
+            hist[color]++;
+        }
+
+        // Compute CDF
+        int sum = 0;
+        for (int i = 0; i < 256; i++) {
+            sum += hist[i];
+            cdf[i] = sum;
+        }
+
+        // Normalize intensities
+        for (int i = 0; i < w * h * c; i += c) {
+            int color = static_cast<int>(histData[i]);
+            histData[i] = static_cast<unsigned char>(std::min(255.0, (cdf[color] * factor)));
+
+        }
+    }
+    else{
+        // Calculate histogram
+        int hist[256] = { 0 };
+        for (int i = 0; i < w * h * c; i += c) {
+            int r = static_cast<int>(histData[i]);
+            int g = static_cast<int>(histData[i + 1]);
+            int b = static_cast<int>(histData[i + 2]);
+            hist[r]++;
+            hist[g]++;
+            hist[b]++;
+        }
+
+        // Compute CDF
+        int sum = 0;
+        for (int i = 0; i < 256; i++) {
+            sum += hist[i];
+            cdf[i] = sum;
+        }
+
+        // Normalize intensities
+        for (int i = 0; i < w * h * c; i += c) {
+            int r = static_cast<int>(histData[i]);
+            int g = static_cast<int>(histData[i + 1]);
+            int b = static_cast<int>(histData[i + 2]);
+            histData[i] = static_cast<unsigned char>(std::min(255.0, (cdf[r] * factor)));
+            histData[i + 1] = static_cast<unsigned char>(std::min(255.0, (cdf[g] * factor)));
+            histData[i + 2] = static_cast<unsigned char>(std::min(255.0, (cdf[b] * factor)));
+        }
     }
 
     // Save image to new filename
@@ -204,24 +237,18 @@ void Filter::median_blur(Image img, int kernel) {
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
             for (int ch = 0; ch < c; ch++) {
-                std::vector<int> values;
+                std::vector<unsigned char> values;
                 for (int ii = std::max(0, i - k); ii <= std::min(h - 1, i + k); ii++) {
                     for (int jj = std::max(0, j - k); jj <= std::min(w - 1, j + k); jj++) {
                         int idx = (ii * w + jj) * c + ch;
                         values.push_back(data[idx]);
                     }
                 }
-                std::sort(values.begin(), values.end());
-                int idx = (i * w + j) * c + ch;
-                output_data[idx] = values[values.size() / 2];
+                quickSort(values, 0, values.size()-1);
+                output_data[(i * w + j) * c + ch] = values[values.size()/2];
             }
         }
     }
-
-
-    //double ke[25] = {0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04,0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04,0.04, 0.04, 0.04,0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04};
-
-    //this->conv_any_kernel(img, ke, 5, output_data);
 
     // Write output image file
     int success = stbi_write_png("../Output/output_medianblur.png", w, h, c, output_data, w * c);
@@ -322,12 +349,12 @@ void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
                         double weight = kernel[m][l];
 
                         sum += data[(ii * w + jj) * c + ch] * weight;
-                        weightSum += weight;
+                        //weightSum += weight;
                     }
                 }
 
                 // Normalize the sum of pixel values by the sum of weights
-                output[(i * w + j) * c + ch] = static_cast<unsigned char>(sum / weightSum);
+                output[(i * w + j) * c + ch] = static_cast<unsigned char>(sum);
             }
         }
     }
