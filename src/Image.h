@@ -11,7 +11,7 @@ private:
     int width;
     int height;
     int channel;
-    unsigned char* data;
+    unsigned char* data;  // char data, 1D array
 
 public:
     // constructor
@@ -31,6 +31,9 @@ public:
     void set_height(int h);
     void set_channel(int c);
     void set_data(unsigned char* dat);
+
+    unsigned char* padding(unsigned char* dat);  // padding 0, 1D array
+
 };
 
 
