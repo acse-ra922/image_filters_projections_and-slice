@@ -307,7 +307,6 @@ void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
 
     int k = kernel_size / 2;
 
-
     // Iterate over each pixel in the image
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
@@ -322,16 +321,13 @@ void Filter::gaussian_blur(Image img, int kernel_size, double sigma) {
                         int l = jj - j + k;
                         double weight = kernel[m][l];
 
-                        int idx = (ii * w + jj) * c + ch;
-                        sum += data[idx] * weight;
+                        sum += data[(ii * w + jj) * c + ch] * weight;
                         weightSum += weight;
-
                     }
                 }
 
                 // Normalize the sum of pixel values by the sum of weights
-                int idx = (i * w + j) * c + ch;
-                output[idx] = static_cast<unsigned char>(sum / weightSum);
+                output[(i * w + j) * c + ch] = static_cast<unsigned char>(sum / weightSum);
             }
         }
     }

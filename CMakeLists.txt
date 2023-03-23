@@ -13,4 +13,6 @@ add_executable(advanced_programming_group_dijkstra
         src/Image.h
         src/Image.cpp
         src/Filter.h
-        src/Filter.cpp)
+        src/Filter.cpp
+        src/Volume.h
+        src/Volume.cpp)
