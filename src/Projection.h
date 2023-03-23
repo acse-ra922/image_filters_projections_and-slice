@@ -31,12 +31,12 @@ public:
 	~Projection();
 
 	// Get functions
-	std::string get_data_dir();
-	int get_width();
-	int get_height();
-	int get_zmin();
-	int get_zmax();
-	int get_file_size();
+	std::string get_data_dir() const;
+	int get_width() const;
+	int get_height() const;
+	int get_zmin() const;
+	int get_zmax() const;
+	int get_file_size() const;
 
 	// Orthographic projection functions
 	unsigned char* max_ip(int zmin = NULL, int zmax = NULL);

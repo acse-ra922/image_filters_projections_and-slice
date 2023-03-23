@@ -49,32 +49,32 @@ void Projection::find_z_range(const int& zmin, const int& zmax)
 }
 
 // Get functions
-std::string Projection::get_data_dir()
+std::string Projection::get_data_dir() const
 {
 	return this->data_dir;
 }
 
-int Projection::get_width()
+int Projection::get_width() const
 {
 	return this->width;
 }
 
-int Projection::get_height()
+int Projection::get_height() const
 {
 	return this->height;
 }
 
-int Projection::get_zmin()
+int Projection::get_zmin() const
 {
 	return this->zmin;
 }
 
-int Projection::get_zmax()
+int Projection::get_zmax() const
 {
 	return this->zmax;
 }
 
-int Projection::get_file_size()
+int Projection::get_file_size() const
 {
     return this->file_size;
 }
