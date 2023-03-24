@@ -88,6 +88,12 @@ cd executable
 ./main_3Dfilter ../Scans/confuciusornis ../Output/confuciusornis
 ```
 
++ Projection
+```
+cd executable
+./main_Projection
+```
+
 ------
 
 ## Documentation and Report
