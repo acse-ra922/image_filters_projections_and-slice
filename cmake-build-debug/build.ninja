@@ -74,8 +74,15 @@ build CMakeFiles/advanced_programming_group_dijkstra.dir/src/Slice.cpp.o: CXX_CO
   OBJECT_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir
   OBJECT_FILE_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir/src
 
-build CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_2D.cpp.o: CXX_COMPILER__advanced_programming_group_dijkstra_Debug /Users/yw22/Desktop/advanced-programming-group-dijkstra/src/main_2D.cpp || cmake_object_order_depends_target_advanced_programming_group_dijkstra
-  DEP_FILE = CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_2D.cpp.o.d
+build CMakeFiles/advanced_programming_group_dijkstra.dir/src/Projection.cpp.o: CXX_COMPILER__advanced_programming_group_dijkstra_Debug /Users/yw22/Desktop/advanced-programming-group-dijkstra/src/Projection.cpp || cmake_object_order_depends_target_advanced_programming_group_dijkstra
+  DEP_FILE = CMakeFiles/advanced_programming_group_dijkstra.dir/src/Projection.cpp.o.d
+  FLAGS = -O2 -g -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++17
+  INCLUDES = -I/Users/yw22/Desktop/advanced-programming-group-dijkstra/src
+  OBJECT_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir
+  OBJECT_FILE_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir/src
+
+build CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_3Dprojection.cpp.o: CXX_COMPILER__advanced_programming_group_dijkstra_Debug /Users/yw22/Desktop/advanced-programming-group-dijkstra/src/main_3Dprojection.cpp || cmake_object_order_depends_target_advanced_programming_group_dijkstra
+  DEP_FILE = CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_3Dprojection.cpp.o.d
   FLAGS = -O2 -g -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++17
   INCLUDES = -I/Users/yw22/Desktop/advanced-programming-group-dijkstra/src
   OBJECT_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir
@@ -89,7 +96,7 @@ build CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_2D.cpp.o: CXX_
 #############################################
 # Link the executable advanced_programming_group_dijkstra
 
-build advanced_programming_group_dijkstra: CXX_EXECUTABLE_LINKER__advanced_programming_group_dijkstra_Debug CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Filter.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Volume.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Slice.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_2D.cpp.o
+build advanced_programming_group_dijkstra: CXX_EXECUTABLE_LINKER__advanced_programming_group_dijkstra_Debug CMakeFiles/advanced_programming_group_dijkstra.dir/src/Image.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Filter.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Volume.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Slice.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/Projection.cpp.o CMakeFiles/advanced_programming_group_dijkstra.dir/src/main_3Dprojection.cpp.o
   FLAGS = -O2 -g -arch x86_64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
   OBJECT_DIR = CMakeFiles/advanced_programming_group_dijkstra.dir
   POST_BUILD = :

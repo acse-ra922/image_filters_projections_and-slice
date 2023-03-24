@@ -5,9 +5,10 @@
 // Yi Yang (yy3222)
 // Rubab Atwal (ra922)
 
+
 #include <vector>
-#include <string>
 #include <filesystem>
+#include <math.h>
 namespace fs = std::filesystem;
 
 #include "Projection.h"

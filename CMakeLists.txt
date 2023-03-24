@@ -18,4 +18,6 @@ add_executable(advanced_programming_group_dijkstra
         src/Volume.cpp
         src/Slice.h
         src/Slice.cpp
-        src/main_2D.cpp)
+        src/Projection.h
+        src/Projection.cpp
+        src/main_3Dprojection.cpp)

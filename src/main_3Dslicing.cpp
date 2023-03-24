@@ -1,9 +1,11 @@
-// A minimal example file showing how to include the stb image headers,
-// and how to read and write image files using these headers.
-//
-// Compilation with: g++-12 minimal.cpp -o minimal
-//
-// Written by T.M. Davison (2023)
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
+
+
 #include <iostream>
 #include <string>
 #include <vector>

@@ -1,3 +1,11 @@
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
+
+
 #include<iostream>
 #include <string>
 
@@ -80,6 +88,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    int success = stbi_write_png("output_projection.png",
+    int success = stbi_write_png("../Output/projection/output_projection.png",
         proj.get_width(), proj.get_height(), 1, data_out, 0);
 }
