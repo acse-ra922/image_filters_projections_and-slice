@@ -16,6 +16,7 @@
 #include "Volume.h"
 #include "utils.h"
 namespace fs = std::filesystem;
+#define M_PI 3.14
 
 Volume::Volume() {}
 
@@ -35,6 +36,7 @@ Volume::Volume(std::string data_dir) {
         return;
     }
 
+    // sort files by their names
     quickSort(files, 0, files.size()-1);
 
     // calculate the total size of the data
@@ -53,7 +55,8 @@ Volume::Volume(std::string data_dir) {
 
 
     // allocate a new unique_ptr to hold the data
-    unsigned char* data = new unsigned char[this->total_size];
+    this->data = std::make_unique<unsigned char[]>(this->total_size);
+    //unsigned char* data = new unsigned char[this->total_size];
 
     // concatenate the images
     unsigned long long offset = 0;
@@ -62,10 +65,10 @@ Volume::Volume(std::string data_dir) {
         buf = stbi_load(file.c_str(), &w, &h, &c, 0);
         if (buf == NULL) {
             std::cerr << "Failed to load image " << file << std::endl;
-            delete[] data;
+            //delete[] data;
             return;
         }
-        std::memcpy(data + offset, buf, this->img_size);
+        std::memcpy(data.get() + offset, buf, this->img_size);
         stbi_image_free(buf);
         buf = nullptr;
 
@@ -80,7 +83,7 @@ Volume::Volume(std::string data_dir) {
     this->height = h;
     this->channel = c;
     this->depth = files.size();
-    this->data = data;
+    //this->data = data;
     this->outdir = files;
 
     //delete [] data;
@@ -88,7 +91,9 @@ Volume::Volume(std::string data_dir) {
 }
 
 // Destructor
-Volume::~Volume() {}
+Volume::~Volume() {
+    //delete data;
+}
 
 int Volume::get_width() { return this->width; }
 
@@ -98,7 +103,9 @@ int Volume::get_channel() { return this->channel; }
 
 int Volume::get_depth() { return this->depth; }
 
-unsigned char* Volume::get_data() { return this->data; }
+//unsigned char* Volume::get_data() { return this->data; }
+
+std::shared_ptr<unsigned char[]> Volume::get_data() { return this->data; }
 
 std::vector<std::string> Volume::get_outdir() {return this->outdir;}
 
@@ -128,7 +135,6 @@ void Volume::writeImages(std::vector<double> processedVolume, std::string outdir
         std::vector<unsigned char> data(width * height);
         std::cout << outputPath << std::endl;
 
-        // for each save dir, write the image
         for (int j = 0; j < width * height; ++j)
         {
             data[j] = static_cast<unsigned char>(processedVolume[j + (width * height * i)]);
@@ -139,8 +145,13 @@ void Volume::writeImages(std::vector<double> processedVolume, std::string outdir
 
 }
 
-std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, double sigma) {
-    unsigned char* volume = v.get_data();
+std::vector<double> Volume::apply3DGaussianFilter(Volume& v, int filterSize, double sigma) {
+    //assert(filterSize % 2 == 1);
+
+    //unsigned char* volume = v.get_data();//
+    //std::shared_ptr<unsigned char[]> volume = v.get_data();//
+    std::shared_ptr<unsigned char[]> volume(v.get_data());//
+
     int width = v.get_width();
     int height = v.get_height();
     int depth = v.get_depth();
@@ -148,7 +159,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
     int halfFilterSize = filterSize / 2;
     std::vector<double> result(width*height*depth);
 
-    double sum = 0.0;
+    double sum = 0.0f;
     std::vector<double> kernel(filterSize * filterSize * filterSize);
     for (int z = -halfFilterSize; z <= halfFilterSize; ++z)
     {
@@ -156,7 +167,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
         {
             for (int x = -halfFilterSize; x <= halfFilterSize; ++x)
             {
-                double value = std::exp(-(x * x + y * y + z * z) / (2.0f * sigma * sigma)) / (std::sqrt(2.0f * M_PI) * sigma);
+                double value = std::exp(-(x * x + y * y + z * z) / (2.0f * sigma * sigma)) / (std::sqrt(2.0f * M_PI) * sigma);//
                 kernel[(z + halfFilterSize) * filterSize * filterSize + (y + halfFilterSize) * filterSize + (x + halfFilterSize)] = value;
                 sum += value;
             }
@@ -175,7 +186,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
         {
             for (int x = 0; x < width; ++x)
             {
-                double sum = 0.0;
+                double sum = 0.0f;
                 for (int kz = -halfFilterSize; kz <= halfFilterSize; ++kz)
                 {
                     for (int ky = -halfFilterSize; ky <= halfFilterSize; ++ky)
@@ -193,7 +204,7 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
                         }
                     }
                 }
-                result[z * width * height + y * width + x] = sum;
+                result[z * width * height + y * width + x] = sum;//
             }
         }
     }
@@ -201,8 +212,12 @@ std::vector<double> Volume::apply3DGaussianFilter(Volume v, int filterSize, doub
     return result;
 }
 
-std::vector<double> Volume::apply3DMedianFilter(Volume v, int filterSize) {
-    unsigned char* volume = v.get_data();
+std::vector<double> Volume::apply3DMedianFilter(Volume& v, int filterSize) {
+    //assert(filterSize % 2 == 1);
+    //unsigned char* volume = v.get_data();
+    std::shared_ptr<unsigned char[]> volume(v.get_data());//
+
+    //std::shared_ptr<unsigned char[]> volume = v.get_data();//
     int width = v.get_width();
     int height = v.get_height();
     int depth = v.get_depth();
@@ -240,13 +255,13 @@ std::vector<double> Volume::apply3DMedianFilter(Volume v, int filterSize) {
     return result;
 }
 
-void Volume::Median3D(Volume v, std::string outdir, int filterSize) {
+void Volume::Median3D(Volume& v, std::string outdir, int filterSize) {
     std::cout << "Applying 3D Median filter..." << std::endl;
     std::vector<double> processedVolume = apply3DMedianFilter(v, filterSize);
     this->writeImages(processedVolume, outdir, "3D_Median");
 }
 
-void Volume::Gaussian3D(Volume v, std::string outdir, int filterSize, double sigma) {
+void Volume::Gaussian3D(Volume& v, std::string outdir, int filterSize, double sigma) {
     std::cout << "Applying 3D Gaussian filter..." << std::endl;
     std::vector<double> processedVolume = apply3DGaussianFilter(v, filterSize, sigma);
     this->writeImages(processedVolume, outdir, "3D_Gaussian");
