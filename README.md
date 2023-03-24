@@ -4,33 +4,50 @@
 
 **March 2023**
 
+```angular2html
+Xuefei Mi (xm421)
+Yuyang Wang (yw22)
+Chaofan Wu (cw522)
+Yi Yang (yy3222)
+Rubab Atwal (ra922)
+```
+
+------
+
 ## Implementation Overview
 
 This is a C++ program that applies a range of image filters and orthographic projections to 2D input images and 3D data volume.
 
 For 2D images we have the following filters:
-
- - Grayscale
- - Automatic colour balance
- - Brightness
- - Histogram equalization
- - Median blur
- - Box blur
- - Gaussian blur
- - Sobel
- - Prewitt
- - Scharr
- - Roberts’ Cross
++ Color correction
+  - Grayscale
+  - Automatic colour balance
+  - Brightness
+  - Histogram equalization
++ Blur
+  - Median blur
+  - Box blur
+  - Gaussian blur
++ Edge detection
+  - Sobel
+  - Prewitt
+  - Scharr
+  - Roberts’ Cross
 
 For 3D data we have the follwing functionalities:
++ Filter
+  - 3D Gaussian
+  - 3D Median
++ Projection
+  - Maximum intensity projection
+  - Minimum intensity projection
+  - Average intensity projection
+  - Projection over a thin slab
++ Slicing
+  - Slicing in the x-z plane
+  - Slicing in the y-z plane
 
- - 3D Gaussian
- - 3D Median
- - Maximum intensity projection
- - Minimum intensity projection
- - Average intensity projection
- - Projection over a thin slab
- - Slicing in the x-z or y-z plane
+------
 
 ## Code Structure
 
@@ -48,12 +65,30 @@ We have implemented one main function and 6 Classes, their names and functionali
 
  - Tests - tests all the functions defined in Filter.cpp, Volume.cpp, Slice.cpp and Projection.cpp
 
+------
 
 ## Requirements
++ Visual Studio (Windows): C++ >= 17
++ Clion (Mac): see `CmakeLists.txt`
 
-C++ >= 17
+------
 
 ## Usage
+
+#### MacOS
++ 2D filter
+```
+cd executable
+./main_2Dfilter
+```
+
++ 3D Gaussian/Median
+```
+cd executable
+./main_3Dfilter ../Scans/confuciusornis ../Output/confuciusornis
+```
+
+------
 
 ## Documentation and Report
 
