@@ -1,4 +1,11 @@
-#include <iostream>
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
+
+
 #include <memory>
 #include <string>
 #include "stb_image.h"
@@ -36,6 +43,7 @@ int Slice::get_slice_pos() const { return this->slice_pos; }
 void Slice::get_slice_pic(Volume& v) {
 
     int idx = 0;
+
     // slice along y-z 
     if (this->slice_plane.compare("y-z") == 0) {
         // create a new unique pointer
@@ -57,7 +65,8 @@ void Slice::get_slice_pic(Volume& v) {
             }
         }
     }
-        // slice along x-z
+
+    // slice along x-z
     else if (this->slice_plane.compare("x-z") == 0) {
         this->slice_pic = std::make_unique<unsigned char[]>(v.get_width() * v.get_depth() * v.get_channel());
 
@@ -108,7 +117,7 @@ void Slice::set_slice_pos(int slice_pos, Volume& v) {
 // store sliced_img
 void Slice::store_pic(Volume& v) {
 
-    std::string filename = this->slice_plane + "_" + std::to_string(this->slice_pos)+".png";
+    std::string filename = "../Output/slicing/" + this->slice_plane + "_" + std::to_string(this->slice_pos)+".png";
 
     int success;
 
