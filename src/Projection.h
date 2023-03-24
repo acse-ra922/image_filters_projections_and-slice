@@ -23,6 +23,13 @@ private:
 	unsigned char* data = nullptr;
 
 	// Helper function
+	/*
+	Compute correct z range of the user specified thin slab
+
+	@param
+	----------
+	zmin, zmax: minimum and maximum z specified by user
+	*/
 	void find_z_range(const int& zmin, const int& zmax);
 
 public:
@@ -41,8 +48,44 @@ public:
 	int get_file_size() const;
 
 	// Orthographic projection functions
+
+	/*
+	Maximum intensity projection
+
+	@param
+	----------
+	zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
+
+	@return
+	----------
+	data: output projection data
+	*/
 	unsigned char* max_ip(int zmin = NULL, int zmax = NULL);
+
+	/*
+	Minimum intensity projection
+
+	@param
+	----------
+	zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
+
+	@return
+	----------
+	data: output projection data
+	*/
 	unsigned char* min_ip(int zmin = NULL, int zmax = NULL);
+
+	/*
+	Average intensity projection
+
+	@param
+	----------
+	zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
+
+	@return
+	----------
+	data: output projection data
+	*/
 	unsigned char* avg_ip(int zmin = NULL, int zmax = NULL);
 };
 

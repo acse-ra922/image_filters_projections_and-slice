@@ -24,13 +24,6 @@ Projection::~Projection()
 }
 
 // Private helper function
-/*
-    Compute correct z range of the user specified thin slab
-
-    @param
-    ----------
-    zmin, zmax: minimum and maximum z specified by user
-*/
 void Projection::find_z_range(const int& zmin, const int& zmax)
 {
     if (zmin == NULL)
@@ -80,17 +73,6 @@ int Projection::get_file_size() const
 
 // Orthographic projection functions
 
-/*
-	Maximum intensity projection
-
-	@param
-	----------
-	zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
-
-	@return
-	----------
-	data: output projection data
-*/
 unsigned char* Projection::max_ip(int zmin, int zmax)
 {
     int c;
@@ -138,17 +120,6 @@ unsigned char* Projection::max_ip(int zmin, int zmax)
     return this->data;
 }
 
-/*
-    Minimum intensity projection
-
-    @param
-    ----------
-    zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
-
-    @return
-    ----------
-    data: output projection data
-*/
 unsigned char* Projection::min_ip(int zmin, int zmax)
 {
     int c;
@@ -196,17 +167,6 @@ unsigned char* Projection::min_ip(int zmin, int zmax)
     return this->data;
 }
 
-/*
-    Average intensity projection
-
-    @param
-    ----------
-    zmin, zmax: minimum and maximum z coordinates of the user specified thin slab
-
-    @return
-    ----------
-    data: output projection data
-*/
 unsigned char* Projection::avg_ip(int zmin, int zmax)
 {
     int c;
