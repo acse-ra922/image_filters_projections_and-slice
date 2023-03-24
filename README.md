@@ -54,3 +54,8 @@ We have implemented one main function and 6 Classes, their names and functionali
 C++ >= 17
 
 ## Usage
+
+##Documentation and Report
+
+The documentation for the project describing the classes, functions and their usage can be found in the "docs/" folder. 
+The report for this project can also be found in the "/docs" folder.
