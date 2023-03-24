@@ -1,7 +1,9 @@
-//
-// Created by Wang, Yuyang on 19/03/2023.
-// Written by Yang, Yi on 21/03/2023.
-//
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
 
 #pragma once
 

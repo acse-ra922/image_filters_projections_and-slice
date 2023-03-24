@@ -1,7 +1,9 @@
-//
-// Created by Wang, Yuyang on 19/03/2023.
-// Written by Yang, Yi on 21/03/2023.
-//
+// Group-Dijkstra
+// Xuefei Mi (xm421)
+// Yuyang Wang (yw22)
+// Chaofan Wu (cw522)
+// Yi Yang (yy3222)
+// Rubab Atwal (ra922)
 
 #include <vector>
 #include <string>
@@ -9,6 +11,7 @@
 namespace fs = std::filesystem;
 
 #include "Projection.h"
+#include "utils.h"
 
 
 // Constructor
@@ -77,10 +80,11 @@ unsigned char* Projection::max_ip(int zmin, int zmax)
 {
     int c;
 
-    // Read in all file names
+    // Read in all file names and sort by name
     std::vector<std::string> files;
     for (const auto& entry : fs::directory_iterator(this->data_dir))
         files.push_back(entry.path().u8string());
+    quickSort(files, 0, files.size() - 1);
 
     // Calculate minimum and maximum z
     this->file_size = files.size();
@@ -124,10 +128,11 @@ unsigned char* Projection::min_ip(int zmin, int zmax)
 {
     int c;
 
-    // Read in all file names
+    // Read in all file names and sort by name
     std::vector<std::string> files;
     for (const auto& entry : fs::directory_iterator(this->data_dir))
         files.push_back(entry.path().u8string());
+    quickSort(files, 0, files.size() - 1);
 
     // Calculate minimum and maximum z
     this->file_size = files.size();
@@ -171,10 +176,11 @@ unsigned char* Projection::avg_ip(int zmin, int zmax)
 {
     int c;
 
-    // Read in all file names
+    // Read in all file names and sort by name
     std::vector<std::string> files;
     for (const auto& entry : fs::directory_iterator(this->data_dir))
         files.push_back(entry.path().u8string());
+    quickSort(files, 0, files.size() - 1);
 
     // Calculate minimum and maximum z
     this->file_size = files.size();
