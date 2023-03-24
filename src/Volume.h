@@ -14,6 +14,7 @@
 
 class Volume {
 protected:
+//private:
     int width;
     int height;
     int depth;
@@ -22,7 +23,8 @@ protected:
     int total_size;
     std::vector<std::string> outdir;
 
-    unsigned char* data;
+    //unsigned char* data;
+    std::shared_ptr<unsigned char[]> data;
 
 public:
     // empty constructor
@@ -42,19 +44,20 @@ public:
     int get_img_size();
     int get_total_size();
     std::vector<std::string> get_outdir();
-    unsigned char* get_data();
+    std::shared_ptr<unsigned char[]> get_data();
+    //unsigned char* get_data();
+
 
     // set function
     void set_width(int w);
     void set_height(int h);
     void set_depth(int d);
 
-    //void store_pic();
     void writeImages(std::vector<double> processedVolume, std::string outdir, const std::string &filterType);
-    std::vector<double> apply3DMedianFilter(Volume v, int filterSize);
-    std::vector<double> apply3DGaussianFilter(Volume v, int filterSize, double sigma);
-    void Median3D(Volume v, std::string outdir, int filterSize);
-    void Gaussian3D(Volume v, std::string outdir, int filterSize, double sigma);
+    std::vector<double> apply3DMedianFilter(Volume& v, int filterSize);
+    std::vector<double> apply3DGaussianFilter(Volume& v, int filterSize, double sigma);
+    void Median3D(Volume& v, std::string outdir, int filterSize);
+    void Gaussian3D(Volume& v, std::string outdir, int filterSize, double sigma);
 
 };
 
