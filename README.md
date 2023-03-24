@@ -55,7 +55,7 @@ C++ >= 17
 
 ## Usage
 
-##Documentation and Report
+## Documentation and Report
 
 The documentation for the project describing the classes, functions and their usage can be found in the "docs/" folder. 
 The report for this project can also be found in the "/docs" folder.
