@@ -76,22 +76,32 @@ We have implemented one main function and 6 Classes, their names and functionali
 ## Usage
 
 #### MacOS
-+ 2D filter
++ 2D Filter
 ```
 cd executable
 ./main_2Dfilter
+./main_2Dfilter.exe
 ```
 
-+ 3D Gaussian/Median
++ 3D Gaussian/Median Filter
 ```
 cd executable
 ./main_3Dfilter ../Scans/confuciusornis ../Output/confuciusornis
+./main_3Dfilter.exe ../Scans/confuciusornis ../Output/confuciusornis
 ```
 
-+ Projection
++ 3D Projection
 ```
 cd executable
-./main_Projection
+./main_3Dprojection
+./main_3Dprojection.exe
+```
+
++ 3D Slicing 
+```
+cd executable
+./main_3Dslicing ../Scans/confuciusornis y-z 10
+./main_3Dslicing.exe ../Scans/confuciusornis y-z 10
 ```
 
 ------
