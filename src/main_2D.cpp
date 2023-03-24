@@ -41,24 +41,24 @@ int main() {
     Image img(w, h, c, data);
     Filter f;
     cout<<"You can perform the following filters."<<endl;
-    cout<<"To implement a filter, enter the list number:"<<endl;
-    cout << "----------------------------" << endl;
-
-    cout<< "1. Automatic Color Balance"<<endl;
-    cout <<"2. Histogram Equalisation" <<endl;
-    cout<< "3. Grayscale"<<endl;
-    cout<<"4. Brightness"<<endl;
-    cout <<"5. Median Blur" <<endl;
-    cout<< "6. Box Blur"<<endl;
-    cout<< "7. Box Blur"<<endl;
-    cout<<"8. Sobel"<<endl;
-    cout<<"9. Prewitt"<< endl;
-    cout <<"10. Scharr" <<endl;
-    cout<<"11. Roberts" <<endl;
 
     string str = "";
     int listnum = -1;
     while(1){
+        cout<<"To implement a filter, enter the list number:"<<endl;
+        cout << "----------------------------" << endl;
+
+        cout<< "1. Automatic Color Balance"<<endl;
+        cout <<"2. Histogram Equalisation" <<endl;
+        cout<< "3. Grayscale"<<endl;
+        cout<<"4. Brightness"<<endl;
+        cout <<"5. Median Blur" <<endl;
+        cout<< "6. Box Blur"<<endl;
+        cout<< "7. Gaussian Blur"<<endl;
+        cout<<"8. Sobel"<<endl;
+        cout<<"9. Prewitt"<< endl;
+        cout <<"10. Scharr" <<endl;
+        cout<<"11. Roberts" <<endl;
         cin>>listnum;
         switch (listnum){
             case 1:
@@ -120,9 +120,6 @@ int main() {
             default:
                 cout << "Please enter a number (1~11)!" << endl;
         }
-
-        // Deallocate memory
-        stbi_image_free(data);
 
         // Ask for continue
         cout<<"Enter Y/y to continue or N/n to terminate the program"<<endl;

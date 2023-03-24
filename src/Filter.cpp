@@ -379,17 +379,17 @@ void Filter::conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* o
     // Initialization
     int w = img.get_width();
     int h = img.get_height();
-    unsigned char* data = img.get_data();
-    unsigned char* p_data = img.padding(data);
+    unsigned char* data = img.get_data();  // w*h
+    unsigned char* p_data = img.padding(data);  // (w+2)*(h+2)
 
-    for (int x = 1; x < h - 1; x++) {
-        for (int y = 1; y < w - 1; y++) {
+    for (int x = 1; x < h + 1; x++) {
+        for (int y = 1; y < w + 1; y++) {
 
             // Compute Gx and Gy values using convolution
             double Gx = 0.0, Gy = 0.0;
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    double pixel = p_data[(x + i) * w + (y + j)];
+                    double pixel = p_data[(x + i) * (w+2) + (y + j)];
                     Gx += kx[(i + 1)*3+(j + 1)] * pixel;
                     Gy += ky[(i + 1)*3+(j + 1)] * pixel;
                 }
@@ -397,7 +397,9 @@ void Filter::conv_3_3_kernel(Image img, double* kx, double* ky, unsigned char* o
 
             // Compute gradient magnitude and direction
             double magnitude = std::min(255.0, sqrt(Gx * Gx + Gy * Gy));
-            output[x * w + y] = static_cast<unsigned char>(magnitude);
+
+            // output: w*h
+            output[(x-1) * w + (y-1)] = static_cast<unsigned char>(magnitude);
         }
     }
 

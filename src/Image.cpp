@@ -51,9 +51,9 @@ unsigned char*Image::padding(unsigned char *dat) {
     unsigned char p_data[(h+2)*(w+2)];
     for(int i=0; i<h+2; ++i){
         for(int j=0; j<w+2; ++j){
-            if(i==0 || i==h+1){p_data[i*w+j]=static_cast<unsigned char>(0);}
-            else if(j==0 || j==w+1){p_data[i*w+j]=static_cast<unsigned char>(0);}
-            else {p_data[i*w+j] = dat[(i-1)*w+(j-1)];}
+            if(i==0 || i==h+1){p_data[i*(w+2)+j]=static_cast<unsigned char>(0);}
+            else if(j==0 || j==w+1){p_data[i*(w+2)+j]=static_cast<unsigned char>(0);}
+            else {p_data[i*(w+2)+j] = dat[(i-1)*w+(j-1)];}
         }
     }
     return p_data;
